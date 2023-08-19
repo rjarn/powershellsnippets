@@ -1,0 +1,16 @@
+# de b.csv is the csv file name
+$ADUsers = Import-csv "de b.csv"
+
+ForEach ($user in $ADUsers) {
+    $email = $user.email
+
+    Get-ADUser -Filter {emailaddress -eq $email} -Properties * | select mail
+
+    Write-Host $email
+
+    $substringEmail = $email.Substring(0, $email.indexof('@'))
+    Write-Host $substringEmail
+
+    # ADgroup1 is the name of the ad group to add the users from de b.csv to
+    Add-ADGroupMember -Identity ADgroup1 -Members $substringEmail
+} 
